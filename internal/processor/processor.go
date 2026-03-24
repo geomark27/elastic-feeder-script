@@ -20,7 +20,7 @@ func Run(database *sql.DB, client *sharepoint.Client, cfg config.Config, cp *che
 	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
 	defer cancel()
 
-	docs, err := db.FetchDocuments(ctx, database)
+	docs, err := db.FetchDocuments(ctx, database, cfg)
 	if err != nil {
 		return fmt.Errorf("obteniendo documentos: %w", err)
 	}

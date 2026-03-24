@@ -21,6 +21,8 @@ type Config struct {
 	Sleep          int
 	CheckpointFile string
 	LogDir         string
+	FROM_DATE      string
+	TO_DATE        string
 }
 
 func Load() Config {
@@ -46,6 +48,8 @@ func Load() Config {
 		Sleep:          getInt("SLEEP", 10),
 		CheckpointFile: getEnv("CHECKPOINT_FILE", "checkpoint.json"),
 		LogDir:         getEnv("LOG_DIR", "logs"),
+		FROM_DATE:      getEnv("FROM_DATE", "2026-01-08"),
+		TO_DATE:        getEnv("TO_DATE", "2026-02-27"),
 	}
 }
 

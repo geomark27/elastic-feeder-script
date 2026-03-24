@@ -42,7 +42,7 @@ func Connect(cfg config.Config) (*sql.DB, error) {
 	return database, nil
 }
 
-func FetchDocuments(ctx context.Context, database *sql.DB) ([]Documento, error) {
+func FetchDocuments(ctx context.Context, database *sql.DB, cfg config.Config) ([]Documento, error) {
 	query := `
 SELECT
     d.path                                      AS DocumentoId,
@@ -62,10 +62,13 @@ FROM documentos d WITH(NOLOCK)
         ON tt.ID = ttv.TRAMITEID
     INNER JOIN tipos_documentos td WITH(NOLOCK)
         ON td.id = d.idTipoDocumento
-WHERE d.created_at >= '2026-01-08'
+WHERE d.created_at >= @fromDate AND d.created_at <= @toDate
 ORDER BY t.created_at DESC`
 
-	rows, err := database.QueryContext(ctx, query)
+	rows, err := database.QueryContext(ctx, query,
+		sql.Named("fromDate", cfg.FROM_DATE),
+		sql.Named("toDate", cfg.TO_DATE),
+	)
 	if err != nil {
 		return nil, fmt.Errorf("ejecutando query: %w", err)
 	}
